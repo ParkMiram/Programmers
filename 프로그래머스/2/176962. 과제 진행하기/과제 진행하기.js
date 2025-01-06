@@ -60,7 +60,7 @@ function solution(plans) {
                     stop(subjectIdx, i);
                 }
             }
-            // 중단된 과목이 없을 경우 다음 과목 진행
+            // 중단된 과목이 없을 경우
             else finishedTime = sortedSubjects[i].start;
             i--;
         }
