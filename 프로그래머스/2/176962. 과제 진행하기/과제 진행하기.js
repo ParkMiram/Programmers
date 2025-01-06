@@ -20,19 +20,19 @@ function solution(plans) {
         }));
 
     // 현재 시간
-    let finishedTime = sortedSubjects[0].start;
+    let currentTime = sortedSubjects[0].start;
 
     // 과목을 완료하는 함수
     const complete = (subject) => {
         completedSubject.push(sortedSubjects[subject].subject);
-        finishedTime += sortedSubjects[subject].playtime;
+        currentTime += sortedSubjects[subject].playtime;
     }
 
     // 과목을 중단하는 함수
     const stop = (subject, nextSubject) => {
-        const remainingTime = sortedSubjects[nextSubject].start - finishedTime;
+        const remainingTime = sortedSubjects[nextSubject].start - currentTime;
         sortedSubjects[subject].playtime -= remainingTime;
-        finishedTime += remainingTime;
+        currentTime += remainingTime;
         onHoldSubject.push(sortedSubjects[subject]);
     }
 
@@ -49,19 +49,19 @@ function solution(plans) {
     // 과제 하나씩 처리
     for (let i = 0; i < sortedSubjects.length; i++) {
         // 현재 시간이 다음 과목 시작 시간보다 적을 경우
-        if (finishedTime < sortedSubjects[i].start) {
+        if (currentTime < sortedSubjects[i].start) {
             if (onHoldSubject.length > 0) {
                 // 중단된 과목이 있을 경우
                 const restartSubject = onHoldSubject.pop(); // 최근에 중단된 과목
                 const subjectIdx = sortedSubjects.indexOf(restartSubject); // 과목의 index
-                if (finishedTime + restartSubject.playtime <= sortedSubjects[i].start) {
+                if (currentTime + restartSubject.playtime <= sortedSubjects[i].start) {
                     complete(subjectIdx);
                 } else {
                     stop(subjectIdx, i);
                 }
             }
-            // 중단된 과목이 없을 경우
-            else finishedTime = sortedSubjects[i].start;
+            // 중단된 과목이 없을 경우 다음 과목 진행
+            else currentTime = sortedSubjects[i].start;
             i--;
         }
         // 현재 시간이 다음 과목 시작 시간과 같을 경우
